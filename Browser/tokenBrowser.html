@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Viewer</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+  <body>
+    <label for="txtFiles">Select a .txt file:</label>
+    <select id="txtFiles"></select>
+    <button id="showImagesBtn" disabled>Show Images</button>
+    <div id="imagesContainer"></div>
+
+    <script>
+      // Define the base URL for image paths
+      const baseUrl =
+        "https://raw.githubusercontent.com/IsThisMyRealName/too-many-tokens-dnd/main/";
+
+      // Function to fetch .txt files in a folder
+      async function fetchTxtFiles() {
+        const response = await fetch('link-files/');
+        const txtFile = await response.text();
+        const txtFiles = txtFile.split('\n').flatMap(line => line.split(' ')).filter(word => word.trim().endsWith('.txt'));
+        return txtFiles;
+      }
+
+      // Function to fetch image paths from a selected .txt file
+      async function fetchImagePaths(fileName) {
+        const response = await fetch('link-files/' + fileName);
+        const lines = await response.text();
+        return lines
+          .split("\n")
+          .filter((line) => line.trim().endsWith(".webp"));
+      }
+
+      // Function to display images
+      async function showImages() {
+        const selectedFileName = document.getElementById("txtFiles").value;
+        const imagePaths = await fetchImagePaths(selectedFileName);
+
+        const imagesContainer = document.getElementById("imagesContainer");
+        imagesContainer.innerHTML = ""; // Clear previous images
+
+        imagePaths.forEach((path) => {
+          const img = document.createElement("img");
+          img.src = baseUrl + selectedFileName.slice(0, -4) + "/" + path;
+          img.width = 256;
+          img.height = 256;
+          imagesContainer.appendChild(img);
+        });
+      }
+
+      // Initialize dropdown with .txt files
+      fetchTxtFiles().then((txtFiles) => {
+        const dropdown = document.getElementById("txtFiles");
+        txtFiles.forEach((fileName) => {
+          const option = document.createElement("option");
+          option.value = fileName;
+          option.text = fileName.split(".")[0]; // Remove .txt extension
+          dropdown.appendChild(option);
+        });
+      });
+
+      // Add event listener to the button
+      document
+        .getElementById("showImagesBtn")
+        .addEventListener("click", showImages);
+
+      // Enable button when a file is selected
+      document
+        .getElementById("txtFiles")
+        .addEventListener("change", function () {
+          document.getElementById("showImagesBtn").disabled = false;
+        });
+    </script>
+  </body>
+</html>
