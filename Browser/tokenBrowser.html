@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Viewer</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Too-Many-Tokens-DND</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-  <body>
-    <label for="txtFiles">Select a .txt file:</label>
-    <select id="txtFiles"></select>
-    <button id="showImagesBtn" disabled>Show Images</button>
-    <div id="imagesContainer"></div>
+<body>
+  <div class="container">
+    <div class="dropdown-container">
+      <label for="txtFiles">Show too many tokens for:</label>
+      <select id="txtFiles" class="select-search"></select>
+      <button id="showImagesBtn" disabled>Show too many tokens</button>
+    </div>
+    <div id="imagesContainer" class="images-container"></div>
+  </div>
 
-    <script>
+  <script>
       // Define the base URL for image paths
       const baseUrl =
         "https://raw.githubusercontent.com/IsThisMyRealName/too-many-tokens-dnd/main/";
